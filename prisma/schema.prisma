@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  fullname          String
+  username          String    @unique
+  password          String
+  image             String
+  info              String
+  status            String
+  contacts          Contact[] @relation("contact")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  messagesAsSender  Message[] @relation("senderMessage")
+  messageAsReceiver Message[] @relation("receiverMessage")
+  groups            Group[]   @relation(fields: [groupIds], references: [id])
+  groupIds          String[]  @db.ObjectId
+}
+
+model Contact {
+  contact User   @relation("contact", fields: [userId], references: [id])
+  userId  String @map("_id") @db.ObjectId
+
+  @@id([userId])
+}
+
+model Message {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  sender     User     @relation(name: "senderMessage", fields: [senderId], references: [id])
+  senderId   String   @db.ObjectId
+  receiver   User     @relation(name: "receiverMessage", fields: [receiverId], references: [id])
+  receiverId String   @db.ObjectId
+  day        String
+  read       Boolean
+  text       String
+  image      String?
+  voice      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  group      Group?   @relation(fields: [groupId], references: [id])
+  groupId    String?  @db.ObjectId
+}
+
+model Group {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  participants   User[]    @relation(fields: [participantIds], references: [id])
+  participantIds String[]  @db.ObjectId
+  messages       Message[]
+}

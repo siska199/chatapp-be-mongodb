@@ -11,16 +11,15 @@ datasource db {
 }
 
 model User {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
-  fullname          String
-  username          String    @unique
-  password          String
-  image             String
-  info              String
-  status            String
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullname String
+  username String  @unique
+  password String
+  image    String?
+  info     String?
+  status   String?
+
   contacts          Contact[] @relation("contact")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
   messagesAsSender  Message[] @relation("senderMessage")
   messageAsReceiver Message[] @relation("receiverMessage")
   groups            Group[]   @relation(fields: [groupIds], references: [id])
@@ -35,20 +34,18 @@ model Contact {
 }
 
 model Message {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  sender     User     @relation(name: "senderMessage", fields: [senderId], references: [id])
-  senderId   String   @db.ObjectId
-  receiver   User     @relation(name: "receiverMessage", fields: [receiverId], references: [id])
-  receiverId String   @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  sender     User    @relation(name: "senderMessage", fields: [senderId], references: [id])
+  senderId   String  @db.ObjectId
+  receiver   User    @relation(name: "receiverMessage", fields: [receiverId], references: [id])
+  receiverId String  @db.ObjectId
   day        String
   read       Boolean
   text       String
   image      String?
   voice      String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  group      Group?   @relation(fields: [groupId], references: [id])
-  groupId    String?  @db.ObjectId
+  group      Group?  @relation(fields: [groupId], references: [id])
+  groupId    String? @db.ObjectId
 }
 
 model Group {

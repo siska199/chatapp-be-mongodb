@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start" : "node src/index.js",
+    "start-dev":"nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +21,12 @@
   "homepage": "https://github.com/siska199/chatapp-be-mongodb#readme",
   "dependencies": {
     "@prisma/client": "^4.6.1",
-    "dotenv": "^16.0.3"
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^8.5.1",
+    "socket.io": "^4.5.3"
   },
   "devDependencies": {
     "prisma": "^4.6.1"
